@@ -1,6 +1,7 @@
 #!/bin/sh
 #
 # Use KDiff3 to interactively view differences between two Git commits/branches.
+# - this is designed to compare two complete folder trees on two branches
 
 # Check the KDiff3 configuration
 checkConfig () {
@@ -43,6 +44,15 @@ checkConfig () {
 	fi
 }
 
+# Check to make sure the utility is running in the root folder of the repository
+checkRootFolder () {
+	if [ ! -d ".git" ]
+		then
+		echo "No .git folder found - need to run from the main repository folder."
+		exit 1
+	fi
+}
+
 # Print script usage
 printUsage () {
 	echo ""
@@ -68,6 +78,10 @@ runUtil () {
 
 # First check the configuration
 checkConfig
+
+# Check that running from the root folder of the repository.
+# Otherwise the copy of files to temporary folders seems out of kilter.
+checkRootFolder
 
 # Parse command parameters, brute force
 if [ $# -ne 2 ]
