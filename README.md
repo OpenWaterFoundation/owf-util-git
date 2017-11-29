@@ -19,7 +19,7 @@ bin/                                 Folder for Git utility shell scripts.
 
 ```
 
-## Installing Utilities ##
+## Installing Utilities and PATH Configuration ##
 
 The utilities can be installed in several ways:
 
@@ -27,8 +27,14 @@ The utilities can be installed in several ways:
 2. Clone the repository and then copy the scripts in the repository `bin` folder to a suitable folder that is in the `PATH`.
 3. Download individual scripts from the repository `bin` folder and install into a suitable folder that is in the `PATH`.
 
-For example, in Cygwin, add something like the following to the `$HOME/.bash_profile` to enable finding scripts in the
-repository `bin` folder:
+Script names are long to avoid ambiguity.  It is expected that command completion is enabled to help.
+If an abbreviated name is desired, define a shell alias or rename the script when installing.
+
+### Cygwin ###
+
+Add something like the following to the `$HOME/.bash_profile` to enable finding scripts in the repository `bin` folder.
+The `$USERNAME` Windows environment variable is recognized by Cygwin and indicates the user's login name (and home folder).
+The folder used to clone the repository is a user preference.
 
 ``` text
 # Set PATH so it includes the Git utilities
@@ -38,8 +44,23 @@ fi
 
 ```
 
-Yes, script names are long to avoid ambiguity.  It is expected that command completion is enabled to help.
-If an abbreviated name is desired, define a shell alias or rename the script when installing.
+### Git Bash ###
+
+Add something like the following to the `$HOME/.bash_profile` to enable finding scripts in the repository `bin` folder.
+The `$USERNAME` Windows environment variable is recognized by Git Bash and indicates the user's login name (and home folder).
+The folder used to clone the repository is a user preference.
+
+``` text
+# Set PATH so it includes the Git utilities
+if [ -d "/C/Users/$USERNAME/owf-dev/Util-Git/git-repos/owf-util-git/bin" ] ; then
+  PATH="/C/Users/$USERNAME/owf-dev/Util-Git/git-repos/owf-util-git/bin:${PATH}"
+fi
+
+```
+
+### Linux ###
+
+To be added...
 
 ## Git Configuration for Utilities ##
 
@@ -57,4 +78,14 @@ Some utility scripts require Git configuration properties, as described below.
 
 ### Git Bash ###
 
+```text
+# Configuration to allow KDiff3 program to be used with 'git difftool' command
+# - KDiff3 is installed on Windows (not within Cygwin)
+[difftool "kdiff3"]
+        path = /C/Program\\ Files/KDiff3/kdiff3.exe
+        cmd = /C/Program\\ Files/KDiff3/kdiff3.exe \"$(cygpath -wla $LOCAL)\" \"$(cygpath -wla $REMOTE)\"
+```
+
 ### Linux ###
+
+To be added...
