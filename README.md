@@ -35,6 +35,7 @@ If an abbreviated name is desired, define a shell alias or rename the script whe
 Add something like the following to the `$HOME/.bash_profile` to enable finding scripts in the repository `bin` folder.
 The `$USERNAME` Windows environment variable is recognized by Cygwin and indicates the user's login name (and home folder).
 The folder used to clone the repository is a user preference.
+If editing from Windows rather than command line, the file is typically located under `C:\Users\username`.
 
 ``` text
 # Set PATH so it includes the Git utilities
@@ -49,6 +50,7 @@ fi
 Add something like the following to the `$HOME/.bash_profile` to enable finding scripts in the repository `bin` folder.
 The `$USERNAME` Windows environment variable is recognized by Git Bash and indicates the user's login name (and home folder).
 The folder used to clone the repository is a user preference.
+If editing from Windows rather than Bash command line, the file is typically located under `C:\Users\username`.
 
 ``` text
 # Set PATH so it includes the Git utilities
@@ -68,6 +70,13 @@ Some utility scripts require Git configuration properties, as described below.
 
 ### Cygwin ###
 
+The name of a user's Git configuration file can be determined using `git --list --show-origin`,
+in which case the file containing a Git configuration property is shown on the left side of output.
+
+The configuration file can be edited from a Cygwin terminal window command line
+using file location `~/.gitconfig` (`$HOME/.gitconfig).
+If editing from Windows, the location is `C:\Users\username\.gitconfig`.
+
 ```text
 # Configuration to allow KDiff3 program to be used with 'git difftool' command
 # - KDiff3 is installed on Windows (not within Cygwin)
@@ -83,7 +92,7 @@ Some utility scripts require Git configuration properties, as described below.
 # - KDiff3 is installed on Windows (not within Cygwin)
 [difftool "kdiff3"]
         path = /C/Program\\ Files/KDiff3/kdiff3.exe
-        cmd = /C/Program\\ Files/KDiff3/kdiff3.exe \"$(cygpath -wla $LOCAL)\" \"$(cygpath -wla $REMOTE)\"
+        cmd = /C/Program\\ Files/KDiff3/kdiff3.exe \"$LOCAL\" \"$REMOTE\"
 ```
 
 ### Linux ###
