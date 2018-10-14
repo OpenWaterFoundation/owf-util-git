@@ -1,0 +1,9 @@
+Git Utilities
+Copyright 2017-2018 Open Water Foundation.
+
+License GPLv3+:  GNU GPL version 3 or later
+
+There is ABSOLUTELY NO WARRANTY; for details see the
+"Disclaimer of Warranty" section of the GPLv3 license in the LICENSE file.
+This is free software: you are free to change and redistribute it
+under the conditions of the GPLv3 license in the LICENSE file.
