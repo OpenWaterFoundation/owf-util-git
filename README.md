@@ -133,10 +133,20 @@ These utilities are particularly useful when multiple repositories
 comprise the full product.
 The utility scripts have been developed and tested in Git Bash.  Utilities are:
 
-* `git-clone-all` - after cloning the main repository for a product,
+### `git-clone-all` ###
+
+After cloning the main repository for a product,
 this script will clone all other repositories needed for product development
-* `git-check` - check the status of all repositories for a product command
+
+### `git-check`  ###
+
+Check the status of all repositories for a product command
 and indicate which ones needed to be pushed, pulled, committed, etc.
+The following example illustrates running the `git-check` utility for this repository.
+
+![git-check-util.png](README-images/git-check-util.png)
+
+### `build-util` Utilities Configuration ###
 
 To use these utilities:
 
