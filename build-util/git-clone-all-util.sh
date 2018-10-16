@@ -24,4 +24,4 @@ githubRootUrl="https://github.com/OpenWaterFoundation"
 mainRepo="owf-util-git"
 
 # Run the generic utility script
-${scriptDir}/git-util/git-clone-all.sh -m "${mainRepo}" -p "${productHome}" -g "${githubRootUrl}" $@
+${scriptDir}/git-util/git-clone-all.sh -m "${mainRepo}" -p "${productHome}" -u "${githubRootUrl}" $@
