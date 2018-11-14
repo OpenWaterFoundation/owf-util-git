@@ -1,8 +1,7 @@
 # owf-util-git #
 
 This repository contains Open Water Foundation (OWF) Git utilities.
-These are scripts that help use Git, intended to work in Linux, Cygwin,
-and particularly Git Bash.
+These are scripts that help use Git, intended to work in Linux, Cygwin, and Git Bash command line environments.
 These utilities encapsulate Git commands that can be complex to use,
 and help automate tasks when a product involves multiple Git repositories
 and Git commands.
@@ -34,11 +33,14 @@ build-util/                          Folder for scripts that would be installed
 
 ## `bin` Utilities - Installing and Configurating the `PATH` ##
 
+The `bin` utilities may be migrated to `build-util` convention as [described below](#build-util-utilities).
 The `bin` utilities can be installed in several ways:
 
 1. Clone the repository and then add the `bin` folder to the `PATH`.
-2. Clone the repository and then copy the scripts in the repository `bin` folder to a suitable folder that is in the `PATH`.
-3. Download individual scripts from the repository `bin` folder and install into a suitable folder that is in the `PATH`.
+2. Clone the repository and then copy the scripts in the repository `bin` folder to a suitable folder,
+which may or may not be in the `PATH`.
+3. Download individual scripts from the repository `bin` folder and install into a suitable folder,
+which may or not be in the `PATH`.
 
 Script names are long to avoid ambiguity.
 It is expected that command completion is enabled to help.
@@ -131,17 +133,21 @@ The Git utilities located in the `build-util` folder are intended to be
 copied to the main repository for a product.
 These utilities are particularly useful when multiple repositories
 comprise the full product.
-The utility scripts have been developed and tested in Git Bash.  Utilities are:
+OWF repositories often include a `build-util` folder that contains scripts useful to developers.
+See this repository for an example.
+
+Utilities are:
 
 ### `git-clone-all` ###
 
 After cloning the main repository for a product,
-this script will clone all other repositories needed for product development
+this script will clone all other repositories needed for product development,
+ignoring repositories that are already cloned.
 
-### `git-check`  ###
+### `git-check` ###
 
-Check the status of all repositories for a product command
-and indicate which ones needed to be pushed, pulled, committed, etc.
+Check the status of all repositories for a product
+and indicate which repositories need to be pushed, pulled, committed, etc.
 The following example illustrates running the `git-check` utility for this repository.
 
 ![git-check-util.png](README-images/git-check-util.png)
@@ -179,6 +185,7 @@ where the leading path folders will vary by user.
           build-util/              Development/build Utilities.
             git-check-prod.sh      git-check.sh wrapper for specific product.
             git-util/              General Git utilities (copy from this repo).
+              git-check.sh         General git-check.sh script.
             product-repo-list.txt  List of repositories, used by Git utilities.
         repo-name-2/               The second repository for the product - a component.
         etc./                      Other repository folders for the product.
