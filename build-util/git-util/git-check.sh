@@ -25,7 +25,7 @@
 # - warn if any repositories use Cygwin because mixing with Git for Windows can cause confusion in tools
 #
 
-version="1.4.0 2018-11-13"
+version="1.5.0 2018-11-16"
 
 # List functions in alphabetical order
 
@@ -51,9 +51,6 @@ checkOperatingSystem()
 			;;
 	esac
 	echo "operatingSystem=$operatingSystem (used to check for Cygwin and filemode compatibility)"
-	if [ "${operatingSystem}" = "cygwin" ]; then
-		echo "RECOMMEND not using Cygwin git commands for development for this product"
-	fi
 }
 
 # Function to confirm that proper command-line Git client is being used.
@@ -85,16 +82,17 @@ checkCommandLineGitCompatibility()
 			# Probably cloned using Git Bash or other Windows-centric Git client
 			${echo2} "${actionWarnColor}DO NOT USE CygWin command line git with this repo (was likely NOT cloned with Cygwin, filemode=false).${colorEnd}"
 		elif [ "${operatingSystem}" = "cygwin" ] && [ "${filemode}" = "true" ]; then
-			# Probably cloned using Cygwin but for consistency recommend Windows-centric Git client
-			echo "RECOMMEND re-cloning repo with Git Bash for consistency (was cloned with Cygwin, filemode=true)."
+			# Probably cloned using Cygwin so consistent with this environment
+			# A global warning is printed at the end if mixing filemodes
+			echo "USE Cygwin or other filemode=true Git client with this repo (filemode=true)."
 		elif [ "${operatingSystem}" = "mingw" ] && [ "${filemode}" = "true" ]; then
 			# Probably cloned using Cygwin but for consistency recommend Windows-centric Git client
 			echo "${actionWarnColor}USE CygWin command line git with this repo (was likely cloned with Cygwin, filemode=true).${colorEnd}"
 		elif [ "${operatingSystem}" = "mingw" ] && [ "${filemode}" = "false" ]; then
 			# Probably cloned using Git Bash or other Windows-centric Git client so OK
-			echo "USE Git Bash or other Windows git client with this repo (filemode=false)."
+			echo "USE Git Bash or other Windows Git client with this repo (filemode=false)."
 		else
-			echo "${actionColor}Unhandled operating system ${operatingSystem} - no git use recommendations provided.${colorEnd}"
+			echo2 "${actionColor}Unhandled operating system ${operatingSystem} - no git client recommendations provided.${colorEnd}"
 		fi
 	fi
 }
@@ -140,10 +138,10 @@ checkRepoStatus()
 	masterRepo="master"
 
 	if [ ! "${currentRepo}" = "${masterRepo}" ]; then
-		${echo2} "${actionColor}Branch:  ${currentRepo}${colorEnd}"
+		${echo2} "${actionColor}Checked out branch:  ${currentRepo}${colorEnd}"
 		${echo2} "${actionColor}May need to pull remote before merging this branch.  Rerun check on master before merging this branch.${colorEnd}"
 	else
-		echo "Branch:  ${masterRepo}"
+		echo "Checked out branch:  ${masterRepo}"
 	fi
 
 	# Get the remote information
@@ -401,13 +399,18 @@ echo ""
 echo "================================================================================"
 echo "Summary of all repositories - see above for details"
 # Print a message to encourage not using Cygwin to clone repositories
-if [ "${cygwinRepoCount}" -ne "0" ]; then
-	echo "Number of Cygwin-cloned repos is ${cygwinRepoCount}.  See above for recommendations."
+if [ "${operatingSystem}" != "linux" ]; then
+	# On windows so make sure that Cygwin and Git Bash is not mixed
+	# because can lead to confusion and technical issues
+	if [ "${cygwinRepoCount}" -ne "0" ] && [ "${repoCount}" -ne "${cygwinRepoCount}" ]; then
+		${echo2} "${actionColor}Number of Cygwin-cloned repos (filemode=true) is ${cygwinRepoCount}, which is not = the repo count ${repoCount}.${colorEnd}"
+		${echo2} "${actionColor}Mixing Cygwin (filemode=true) and Git Bash (filemode=false) can cause issues.${colorEnd}"
+	fi
 fi
 # Print message to alert about attention needed on any repository
 # Don't need to color the number of repositories
 echo "Product Git repositories folder: ${gitReposFolder}"
-echo "Repository list file: ${repoListFile}"
+echo "Repository repository list file: ${repoListFile}"
 echo "================================================================================"
 echo "Number of repositories:                                                   ${repoCount}"
 if [ "${upToDateRepoCount}" -eq "${repoCount}" ]; then
