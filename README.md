@@ -7,46 +7,250 @@ and help automate tasks when a product involves multiple Git repositories
 and Git commands.
 The scripts also check for configuration issues to help avoid errors.
 
+* [Background](#background)
 * [Repository Contents](#repository-contents)
-* [`bin` Utilities - Installing and Configurating the `PATH`](#bin-utilities-installing-and-configuring-the-path)
-* [`bin` Utilities - Git Configuration](#bin-utilities-git-configuration)
-* [`build-util` Utilities](#build-util-utilities)
+* [Utilities List](#utilities-list)
+  + [`git-check`](#git-check) - check status of product repositories
+  + [`git-clone-all`](#git-clone-all) - clone all repositories for a product
+  + [`git-difftool-kdiff3`](#git-difftool-kdiff3) - simplify use of DKiff3 on folders
+  + [`git-tag-all`](#git-tag-all) - tag all repositories for a product
+* [Installing Git Utilities](#installing-git-utilities)
+  + [Approach 1: Install Scripts in Main repository `build-util/git-util` Repository](#approach-1-install-scripts-in-main-repository-build-util-git-util-repository)
+  + [Approach 2: Install as Clone of owf-git-util in Product Folder](#approach-2-install-as-clone-of-owf-git-util-in-product-folder)
+  + [Approach 3: Install as clone of owf-git-util Repository in User Files](#approach-3-install-as-clone-of-owf-git-util-in-user-files)
+  + [Approach 4: Install Scripts in User Account bin folder](#user-account-bin-folder)
 * [License](#license)
 * [Contributing](#contributing)
 
 -----
+
+## Background ##
+
+Despite its widespread adoption, Git is not a simple system.
+The initial learning curve can be steep,
+it is easy to forget commands, and there are many special situations
+that require a deeper understanding of Git.
+Periodic Git users may not be able to remember how to use Git.
+In short, Git can be intimidating, which introduces a barrier to its adoption.
+
+Using Git involves understanding its commands and protocols
+as well as integrating a version-control system within the overall development environment
+and workflow of a team.  Development environments are made more
+complicated when dealing with different operating systems and development tools.
+For example, handling end-of-line character and file permissions introduces challenges.
+
+Various tools such as [Git for Windows](https://git-scm.com/),
+text editors and integrated development environments (IDEs) with Git integration,
+and Git hosting websites ([GitHub](https://github.com/),
+[Bitbucket](https://bitbucket.org), [GitLab](https://about.gitlab.com/), etc.)
+provide "easy to use" Git tools.
+Nevertheless, Git can be intimidating and tools may actually make Git operations more opaque to understand.
+Although Git should behave similarly across development environments,
+there are always variations in how Git tools are accessed and behave.
+
+This repository contains a number of command-line Git tools that have been developed
+to help use Git in multiple operating systems,
+in particular for projects that involve more than one repository, a single
+developer or small team, and using a feature/topic branch off the master branch.
+Scripts are particularly useful for the primary contributor/gate-keeper
+that works directly with repositories.
+Additional support for pull requests will be added.
+The tools run in the following command line environments
+and can augment other Git tools such as editors and IDEs:
+
+* Git bash
+* Cygwin
+* Linux
+
+Installation of the tools is flexible,
+with [several installation options described below](#installing-git-utilities).
 
 ## Repository Contents ##
 
 The following folder structure is used for the repository:
 
 ```text
-.gitattributes                       Git repository configuration file.
-.gitignore                           Git configuration file for files to ignore.
-bin/                                 Folder for Git utility shell scripts,
-                                     intended to work with any repository.
-  git-difftool-kdiff3-folders.sh     Use KDiff3 to "diff" two folders from commits/branches.
-build-util/                          Folder for scripts that would be installed
-                                     in a build-util folder in a repository.
+.gitattributes       Git repository configuration file.
+.gitignore           Git configuration file for files to ignore.
+build-util/          Folder for product-specific scripts installed
+                     using a build-util/git-util approach,
+                     using this repository as an example.
+  git-check-util.sh  Product-specific script to check Git repository status,
+                     calls git-util/git-check.sh.
+  etc.
+  git-util/          Folder containing general Git utility scripts.
+    git-check.sh     General script for checking Git repository status.
+    etc.
 
 ```
 
-## `bin` Utilities - Installing and Configurating the `PATH` ##
+A recommended development environment folder structure is as follows,
+but will of course vary by product and developer.
+The Git utility scripts can work with any folder structure with specification of folders
+via command arguments.  Scripts check for non-existence of folders and print warnings.
 
-The `bin` utilities may be migrated to `build-util` convention as [described below](#build-util-utilities).
-The `bin` utilities can be installed in several ways:
+```
+C:\User\user\        User files on Windows.
+/home/user/          User files on Linux.
+c/User/user/         User files on Git Bash.
+/cygdrive/c/         User files in Cygwin.
+   OrgOrSystem/      Folder for the organization or system,
+                     to differentiate personal, company, client, systems.
+     Product/        Folder for the product name.
+       git-repos/    Folder for one or more Git repositories.
+         git-repo1/  First Git repository for the product.
+         git-repo2/  Second Git repository for the product.
+         etc./
+```
 
-1. Clone the repository and then add the `bin` folder to the `PATH`.
-2. Clone the repository and then copy the scripts in the repository `bin` folder to a suitable folder,
-which may or may not be in the `PATH`.
-3. Download individual scripts from the repository `bin` folder and install into a suitable folder,
-which may or not be in the `PATH`.
+## Utilities List ##
 
-Script names are long to avoid ambiguity.
-It is expected that command completion is enabled to help.
-If an abbreviated name is desired, define a shell alias or rename the script when installing.
+The following are the utilities included in this repository,
+which can be found in the `build-util/git-util` folder.
+A short product-specific script is included in the `build-util` folder and
+calls the general script in `build-util/git-util`.
+The name of the product-specific script should usually add to the name of
+the specific script to avoid confusion.
+For example `build-util/git-check-util.sh` calls `build-util/git-util/git_check.sh`.
 
-### Cygwin ###
+The utilities use a file
+[`build-util/product-repo-list.txt`](build-util/product-repo-list.txt),
+which contains a list of the repositories.
+This file is expected to reside in the main product repository in the same folder as the
+product-specific script, for example in `build-util` in this repository.
+
+Why is the extension `.sh` used on scripts rather than no extension?
+It can be confusing, especially on Windows, to know how a program should
+be run and the extension provides a clue.
+Implementers of the utilities can choose to remove the extension from the general script,
+or omit the extension from the custom script.
+
+Each script can be run with `-h` to print its usage.  Run with the `-v` option to check the version.
+
+| **Utility Script**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | **Description** |
+|--------------------------|-----------------|
+|`git-check.sh`            | Check all the repositories in the `product-repo-list.txt` file and recommend whether to push, pull, etc.  Also helps avoid common issues like confusing Cygwin and Git Bash cloned-repos, which can cause end-of-line and file permission issues. |
+| `git-clone-all.sh`       | Use the `product-repo-list.txt` file in the main repository to clone other needed repositories, useful when setting up a new development environment. |
+| `git-difftool-kdiff3.sh` | Simplify use of KDiff3 to compare folders. |
+| `git-tag-all.sh`         | Use the `product-repo-list.txt` file to tag all repositories for a product, useful when tagging milestone releases across multiple repositories. |
+
+### `git-check` ###
+
+Check the status of all repositories for a product
+and indicate which repositories need to be pushed, pulled, committed, etc.
+The following example illustrates running the `git-check` utility for this repository.
+
+![git-check-util.png](README-images/git-check-util.png)
+
+### `git-clone-all` ###
+
+After cloning the main repository for a product,
+this script will clone all other repositories needed for product development,
+ignoring repositories that are already cloned.
+
+### `git-tag-all` ###
+
+Under development in a specific product - tags multiple repositories for a product.
+
+### `git-difftool-kdiff3` ###
+
+Under development in a specific product - trying to make it easy to use KDiff3 to compare versions/folders.
+
+## Installing Git Utilities ##
+
+The Git utilities provide useful features for basic tasks.
+However, implementation of the utilities can vary by product and/or developer.
+The following sections describe several options for implementing the utilities as well as
+benefits and issues with each approach.
+
+### Approach 1: Install Scripts in Main repository `build-util/git-util` Repsository ###
+
+The utility scripts can be copied to a `build-util/git-util` folder in the main
+repository for a product.
+The main benefits of this approach are that working scripts are versioned and will
+not break if the utility scripts are updated by the script developers,
+and the scripts can be customized as needed.
+The downside to this approach is that the scripts have to be updated in each
+product that they are implemented.
+In practice, this approach is OK because the scripts only need to be updated
+if they are not meeting needs, and manually copying allows testing the new copy.
+
+To implement using this approach:
+
+1. Determine the product's main repository.
+This is typically the repository for the source code of the main program.
+Other repositories in a product may include tests, other software components,
+development environment tools, documentation,
+libraries, etc.
+2. In the main repository working files,
+create a `build-util` folder, if not already created.
+3. Under `build-util`, create a `git-util` folder.
+4. Copy desired general Git utility scripts from the `build-util/git-util` folder of
+this repository to the folder created in step 3.
+Gain access to the scripts by individually downloading files from the repository or clone
+the `owf-util-git` repository to a local folder and then copy the scripts.
+These scripts should not need to be modified.
+If changes are needed, alert the development team via GitHub repository issues.
+A simple way to download scripts may be added in the future.
+5. In the `build-util` folder created in step 2,
+create scripts that are specific to the product's main repository.
+These scripts will indicate folders to the general scripts.
+See examples in the `build-util` folder of this repository.
+6. Also in the `build-util` folder, create a file `product-repo-list.txt`
+containing the list of repository names for the product.
+See the [example `product-repo-list.txt` file in this repository](build-util/product-repo-list.txt).
+This file will be used to perform operations on multiple repositories that comprise a product.
+
+The resulting folder structure will be similar that of this repository.
+
+### Approach 2: Install as Clone of owf-git-util in Product Folder ###
+
+Another approach to installing the utilities is to clone the `owf-git-util`
+repository similar to other repositories that comprise the product.
+In this case, the general scripts would need to be called
+with a wrapper script similar to Approach 1, but the path to the generalized
+script would be to the location of the generalized script in the cloned repository.
+
+The benefit of this approach is that updates to the utilities scripts would occur by pulling the repo.
+The downside is that changes in the utility scripts when pulled could break operational development environments.
+It may also complicate a product's development environment by having a repository that is not a part of the product, for example whether to list in `product-repo-list.txt`.
+Also, because the utility scripts will not be tracked in the product repository,
+changes over time will likely break for a specific product version.
+
+### Approach 3: Install as clone of owf-git-util Repository in User Files ###
+
+This approach is similar to Approach 2 except that the repository is cloned
+to a location in the user's files separate from the product repositories.
+This approach may be used in any case to gain access to a local copy of the scripts.
+For example, clone the repository to a location under the user files and then
+copy specific scripts in the main product repository that call the general scripts
+as per Approach 1.
+
+A major issue to this approach is that scripts in a product repository will
+reference a repository folder that may not be consistent amount developers.
+
+An issue with this approach is that each repository that uses the utilities must
+assume that they have been installed in this way,
+Also, because the utility scripts will not be tracked in the product repository,
+changes over time will likely break for a specific product version.
+
+### Approach 4: Install Scripts in User Account bin folder ###
+
+This approach involves copying the utility scripts to a `bin` folder that is in
+the User's account `PATH`.
+This allows the scripts to be called from any location.
+The `owf-util-git` repository should be cloned to a location and scripts complicated
+into the user's `bin` folder.
+
+The benefit to this approach is that the scripts will be accessible to all products and repositories.
+An issue with this approach is that each repository that uses the utilities must
+assume that they have been installed in this way.
+Also, because the utility scripts will not be tracked in the product repository,
+changes over time will likely break for a specific product version.
+
+Specifics to this approach are listed below.
+
+#### Cygwin ####
 
 It is assumed that repositories will be cloned in the Windows user files (`/cygdrive/C/Users`),
 rather than Cygwin user files (`/home`).
@@ -63,7 +267,7 @@ fi
 
 ```
 
-### Git Bash ###
+#### Git Bash ####
 
 Add something like the following to the `$HOME/.bash_profile` to enable finding scripts in the repository `bin` folder.
 The `$HOME` Windows environment variable is recognized by Git Bash and indicates the user's login name (and home folder).
@@ -78,7 +282,7 @@ fi
 
 ```
 
-### Linux ###
+#### Linux ####
 
 Add something like the following to the `$HOME/.bash_profile` to enable finding scripts in the repository `bin` folder.
 The `$HOME` Windows environment variable is recognized by Git Bash and indicates the user's login name (and home folder).
@@ -90,105 +294,6 @@ if [ -d "$HOME/owf-dev/Util-Git/git-repos/owf-util-git/bin" ] ; then
   PATH="$HOME/owf-dev/Util-Git/git-repos/owf-util-git/bin:${PATH}"
 fi
 
-```
-
-## `bin` Utilities - Git Configuration ##
-
-Some utility scripts require Git configuration properties, as described below.
-
-### Cygwin ###
-
-The name of a user's Git configuration file can be determined using `git --list --show-origin`,
-in which case the file containing a Git configuration property is shown on the left side of output.
-
-The configuration file can be edited from a Cygwin terminal window command line
-using file location `~/.gitconfig` (`$HOME/.gitconfig).
-If editing from Windows, the location is `C:\Users\username\.gitconfig`.
-
-```text
-# Configuration to allow KDiff3 program to be used with 'git difftool' command
-# - KDiff3 is installed on Windows (not within Cygwin)
-[difftool "kdiff3"]
-        path = /cygdrive/C/Program\\ Files/KDiff3/kdiff3.exe
-        cmd = /cygdrive/C/Program\\ Files/KDiff3/kdiff3.exe \"$(cygpath -wla $LOCAL)\" \"$(cygpath -wla $REMOTE)\"
-```
-
-### Git Bash ###
-
-```text
-# Configuration to allow KDiff3 program to be used with 'git difftool' command
-# - KDiff3 is installed on Windows (not within Cygwin)
-[difftool "kdiff3"]
-        path = /C/Program\\ Files/KDiff3/kdiff3.exe
-        cmd = /C/Program\\ Files/KDiff3/kdiff3.exe \"$LOCAL\" \"$REMOTE\"
-```
-
-### Linux ###
-
-To be added...
-
-## `build-util` Utilities ##
-
-The Git utilities located in the `build-util` folder are intended to be
-copied to the main repository for a product.
-These utilities are particularly useful when multiple repositories
-comprise the full product.
-OWF repositories often include a `build-util` folder that contains scripts useful to developers.
-See this repository for an example.
-
-Utilities are:
-
-### `git-clone-all` ###
-
-After cloning the main repository for a product,
-this script will clone all other repositories needed for product development,
-ignoring repositories that are already cloned.
-
-### `git-check` ###
-
-Check the status of all repositories for a product
-and indicate which repositories need to be pushed, pulled, committed, etc.
-The following example illustrates running the `git-check` utility for this repository.
-
-![git-check-util.png](README-images/git-check-util.png)
-
-### `build-util` Utilities Configuration ###
-
-To use these utilities:
-
-1. Determine the product's main repository.
-This is typically the repository for the source code of the main program.
-Other repositories in a product may include tests, documentation,
-libraries, etc.
-2. In the main repository working files,
-create a `build-util` folder, if not already created.
-3. Under `build-util`, create a `git-util` folder.
-4. Copy desired Git utility scripts from the `build-util/git-util` folder of
-this repository to the folder created in step 3.
-These scripts should not need to be modified.
-5. In the `build-util` folder created in step 2,
-create scripts that are specific to the product's main repository.
-See examples in the `build-util` folder of this repository.
-6. Also in the `build-util` folder, create a file `product-repo-list.txt`
-containing the list of repository names for the product.
-See the [example `product-repo-list.txt` file in this repository](build-util/product-repo-list.txt).
-
-The resulting folder structure will be similar to the following,
-where the leading path folders will vary by user.
-
-```
-/UserHome/                         User's home folder.
-  DevFiles/                        Development files, separate from user's other files.
-    SomeProduct/                   The development files for a product.
-      git-repos/                   Folder to hold all Git repositories for a product.
-        repo-name-main/            The first repository for the product - main repo.
-          build-util/              Development/build Utilities.
-            git-check-prod.sh      git-check.sh wrapper for specific product.
-            git-util/              General Git utilities (copy from this repo).
-              git-check.sh         General git-check.sh script.
-            product-repo-list.txt  List of repositories, used by Git utilities.
-        repo-name-2/               The second repository for the product - a component.
-        etc./                      Other repository folders for the product.
 ```
 
 ## License ##
@@ -204,4 +309,4 @@ which will be the case anyhow.
 
 These Git utilities have been developed by the Open Water Foundation to
 help its staff and collaborators be effective and efficient with Git and GitHub.
-Contributions are welcome.
+Feedback and contributions are welcome.  We will try to incorporate.
