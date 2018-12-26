@@ -15,10 +15,10 @@ The scripts also check for configuration issues to help avoid errors.
   + [`git-difftool-kdiff3`](#git-difftool-kdiff3) - simplify use of DKiff3 on folders
   + [`git-tag-all`](#git-tag-all) - tag all repositories for a product
 * [Installing Git Utilities](#installing-git-utilities)
-  + [Approach 1: Install Scripts in Main repository `build-util/git-util` Repository](#approach-1-install-scripts-in-main-repository-build-util-git-util-repository)
+  + [Approach 1: Install Scripts in Main repository `build-util/git-util` Folder](#approach-1-install-scripts-in-main-repository-build-utilgit-util-folder)
   + [Approach 2: Install as Clone of owf-git-util in Product Folder](#approach-2-install-as-clone-of-owf-git-util-in-product-folder)
   + [Approach 3: Install as clone of owf-git-util Repository in User Files](#approach-3-install-as-clone-of-owf-git-util-in-user-files)
-  + [Approach 4: Install Scripts in User Account bin folder](#user-account-bin-folder)
+  + [Approach 4: Install Scripts in User Account bin folder](#approach-4-install-scripts-in-user-account-bin-folder)
 * [License](#license)
 * [Contributing](#contributing)
 
@@ -144,17 +144,17 @@ The following example illustrates running the `git-check` utility for this repos
 
 ### `git-clone-all` ###
 
-After cloning the main repository for a product,
-this script will clone all other repositories needed for product development,
+This script will clone all other repositories needed for product development,
 ignoring repositories that are already cloned.
+The main repository will need to be cloned first so that the product list can be found.
+
+### `git-difftool-kdiff3` ###
+
+Under development - trying to make it easy to use KDiff3 to compare versions/folders.
 
 ### `git-tag-all` ###
 
 Under development in a specific product - tags multiple repositories for a product.
-
-### `git-difftool-kdiff3` ###
-
-Under development in a specific product - trying to make it easy to use KDiff3 to compare versions/folders.
 
 ## Installing Git Utilities ##
 
@@ -163,7 +163,7 @@ However, implementation of the utilities can vary by product and/or developer.
 The following sections describe several options for implementing the utilities as well as
 benefits and issues with each approach.
 
-### Approach 1: Install Scripts in Main repository `build-util/git-util` Repsository ###
+### Approach 1: Install Scripts in Main repository `build-util/git-util` Folder ###
 
 The utility scripts can be copied to a `build-util/git-util` folder in the main
 repository for a product.
