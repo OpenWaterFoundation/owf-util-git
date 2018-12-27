@@ -17,7 +17,7 @@ The scripts also check for configuration issues to help avoid errors.
 * [Installing Git Utilities](#installing-git-utilities)
   + [Approach 1: Install Scripts in Main repository `build-util/git-util` Folder](#approach-1-install-scripts-in-main-repository-build-utilgit-util-folder)
   + [Approach 2: Install as Clone of owf-git-util in Product Folder](#approach-2-install-as-clone-of-owf-git-util-in-product-folder)
-  + [Approach 3: Install as clone of owf-git-util Repository in User Files](#approach-3-install-as-clone-of-owf-git-util-in-user-files)
+  + [Approach 3: Install as clone of owf-git-util Repository in User Files](#approach-3-install-as-clone-of-owf-git-util-repository-in-user-files)
   + [Approach 4: Install Scripts in User Account bin folder](#approach-4-install-scripts-in-user-account-bin-folder)
 * [License](#license)
 * [Contributing](#contributing)
