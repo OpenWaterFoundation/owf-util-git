@@ -10,14 +10,14 @@ The scripts also check for configuration issues to help avoid errors.
 * [Background](#background)
 * [Repository Contents](#repository-contents)
 * [Utilities List](#utilities-list)
-  + [`git-check`](#git-check) - check status of product repositories
-  + [`git-clone-all`](#git-clone-all) - clone all repositories for a product
-  + [`git-difftool-kdiff3`](#git-difftool-kdiff3) - simplify use of DKiff3 on folders
-  + [`git-tag-all`](#git-tag-all) - tag all repositories for a product
+  + [`git-check.sh`](#git-check-sh) - check status of product repositories
+  + [`git-clone-all.sh`](#git-clone-all-sh) - clone all repositories for a product
+  + [`git-difftool-kdiff3.sh`](#git-difftool-kdiff3-sh) - simplify use of DKiff3 on folders
+  + [`git-tag-all.sh`](#git-tag-all-sh) - tag all repositories for a product
 * [Installing Git Utilities](#installing-git-utilities)
   + [Approach 1: Install Scripts in Main repository `build-util/git-util` Folder](#approach-1-install-scripts-in-main-repository-build-utilgit-util-folder)
   + [Approach 2: Install as Clone of owf-git-util in Product Folder](#approach-2-install-as-clone-of-owf-git-util-in-product-folder)
-  + [Approach 3: Install as clone of owf-git-util Repository in User Files](#approach-3-install-as-clone-of-owf-git-util-repository-in-user-files)
+  + [Approach 3: Install as Clone of owf-git-util Repository in User Files](#approach-3-install-as-clone-of-owf-git-util-repository-in-user-files)
   + [Approach 4: Install Scripts in User Account bin folder](#approach-4-install-scripts-in-user-account-bin-folder)
 * [License](#license)
 * [Contributing](#contributing)
@@ -134,7 +134,7 @@ Each script can be run with `-h` to print its usage.  Run with the `-v` option t
 | `git-difftool-kdiff3.sh` | Simplify use of KDiff3 to compare folders. |
 | `git-tag-all.sh`         | Use the `product-repo-list.txt` file to tag all repositories for a product, useful when tagging milestone releases across multiple repositories. |
 
-### `git-check` ###
+### `git-check.sh` ###
 
 Check the status of all repositories for a product
 and indicate which repositories need to be pushed, pulled, committed, etc.
@@ -142,19 +142,21 @@ The following example illustrates running the `git-check` utility for this repos
 
 ![git-check-util.png](README-images/git-check-util.png)
 
-### `git-clone-all` ###
+### `git-clone-all.sh` ###
 
-This script will clone all other repositories needed for product development,
+This script will clone all repositories for a product,
 ignoring repositories that are already cloned.
 The main repository will need to be cloned first so that the product list can be found.
 
-### `git-difftool-kdiff3` ###
+### `git-difftool-kdiff3.sh` ###
 
-Under development - trying to make it easy to use KDiff3 to compare versions/folders.
+Under development - trying to make it easy to use KDiff3 to compare versions/folders
+for working files, master and other branches, etc.
 
-### `git-tag-all` ###
+### `git-tag-all.sh` ###
 
-Under development in a specific product - tags multiple repositories for a product.
+This script tags all the repositories in the product list.
+The script prompts the user for tag name and commit message.
 
 ## Installing Git Utilities ##
 
@@ -217,7 +219,7 @@ It may also complicate a product's development environment by having a repositor
 Also, because the utility scripts will not be tracked in the product repository,
 changes over time will likely break for a specific product version.
 
-### Approach 3: Install as clone of owf-git-util Repository in User Files ###
+### Approach 3: Install as Clone of owf-git-util Repository in User Files ###
 
 This approach is similar to Approach 2 except that the repository is cloned
 to a location in the user's files separate from the product repositories.
