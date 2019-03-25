@@ -10,6 +10,7 @@ The scripts also check for configuration issues to help avoid errors.
 * [Background](#background)
 * [Repository Contents](#repository-contents)
 * [Utilities List](#utilities-list)
+  + [`git-backup.sh`](#git-backup-sh) - clone repositories to a backup folder
   + [`git-check.sh`](#git-check-sh) - check status of product repositories
   + [`git-clone-all.sh`](#git-clone-all-sh) - clone all repositories for a product
   + [`git-difftool-kdiff3.sh`](#git-difftool-kdiff3-sh) - simplify use of DKiff3 on folders
@@ -129,6 +130,7 @@ Each script can be run with `-h` to print its usage.  Run with the `-v` option t
 
 | **Utility Script**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | **Description** |
 |--------------------------|-----------------|
+| `git-backup.sh`          | Use the `backup-repo-list.txt` file specified with `-l` option to clone repositories into a backup folder. |
 |`git-check.sh`            | Check all the repositories in the `product-repo-list.txt` file and recommend whether to push, pull, etc.  Also helps avoid common issues like confusing Cygwin and Git Bash cloned-repos, which can cause end-of-line and file permission issues. |
 | `git-clone-all.sh`       | Use the `product-repo-list.txt` file in the main repository to clone other needed repositories, useful when setting up a new development environment. |
 | `git-difftool-kdiff3.sh` | Simplify use of KDiff3 to compare folders. |
@@ -141,6 +143,12 @@ and indicate which repositories need to be pushed, pulled, committed, etc.
 The following example illustrates running the `git-check` utility for this repository.
 
 ![git-check-util.png](README-images/git-check-util.png)
+
+### `git-backup.sh` ###
+
+This script will clone all repositories specified by the `-l backupRepoListFile` option,
+with output to the folder specified by the `-o outputFolder` option.
+This is useful as a step to backup repositories to media or a different system folder or cloud bucket.
 
 ### `git-clone-all.sh` ###
 

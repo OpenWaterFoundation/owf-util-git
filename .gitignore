@@ -8,10 +8,11 @@
 # Ignore log files
 *.log
 
+# Ignore backup folder
+/build-util/backups
+
 # Office temporary files
-
 *.tmp
-
 # Word
 #~$*.doc*
 # Excel

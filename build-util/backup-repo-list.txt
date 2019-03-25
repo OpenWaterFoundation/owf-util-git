@@ -1,0 +1,2 @@
+# List of repository URLs to backup, as used with 'git clone'
+https://github.com/OpenWaterFoundation/owf-util-git.git
