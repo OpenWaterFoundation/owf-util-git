@@ -10,16 +10,16 @@ The scripts also check for configuration issues to help avoid errors.
 * [Background](#background)
 * [Repository Contents](#repository-contents)
 * [Utilities List](#utilities-list)
-  + [`git-backup.sh`](#git-backup-sh) - clone repositories to a backup folder
-  + [`git-check.sh`](#git-check-sh) - check status of product repositories
-  + [`git-clone-all.sh`](#git-clone-all-sh) - clone all repositories for a product
-  + [`git-difftool-kdiff3.sh`](#git-difftool-kdiff3-sh) - simplify use of DKiff3 on folders
-  + [`git-tag-all.sh`](#git-tag-all-sh) - tag all repositories for a product
+    + [`git-backup.sh`](#git-backup-sh) - clone repositories to a backup folder
+    + [`git-check.sh`](#git-check-sh) - check status of product repositories
+    + [`git-clone-all.sh`](#git-clone-all-sh) - clone all repositories for a product
+    + [`git-difftool-kdiff3.sh`](#git-difftool-kdiff3-sh) - simplify use of DKiff3 on folders
+    + [`git-tag-all.sh`](#git-tag-all-sh) - tag all repositories for a product
 * [Installing Git Utilities](#installing-git-utilities)
-  + [Approach 1: Install Scripts in Main repository `build-util/git-util` Folder](#approach-1-install-scripts-in-main-repository-build-utilgit-util-folder)
-  + [Approach 2: Install as Clone of owf-git-util in Product Folder](#approach-2-install-as-clone-of-owf-git-util-in-product-folder)
-  + [Approach 3: Install as Clone of owf-git-util Repository in User Files](#approach-3-install-as-clone-of-owf-git-util-repository-in-user-files)
-  + [Approach 4: Install Scripts in User Account bin folder](#approach-4-install-scripts-in-user-account-bin-folder)
+    + [Approach 1: Install Scripts in Main repository `build-util/git-util` Folder](#approach-1-install-scripts-in-main-repository-build-utilgit-util-folder)
+    + [Approach 2: Install as Clone of owf-git-util in Product Folder](#approach-2-install-as-clone-of-owf-git-util-in-product-folder)
+    + [Approach 3: Install as Clone of owf-git-util Repository in User Files](#approach-3-install-as-clone-of-owf-git-util-repository-in-user-files)
+    + [Approach 4: Install Scripts in User Account bin folder](#approach-4-install-scripts-in-user-account-bin-folder)
 * [License](#license)
 * [Contributing](#contributing)
 
@@ -144,6 +144,12 @@ The following example illustrates running the `git-check` utility for this repos
 
 ![git-check-util.png](README-images/git-check-util.png)
 
+#### `git-check.sh` Release Notes ####
+
+| **Version** | **Description** |
+| -- | -- |
+| 1.9.2 (2022-09-22) | Handle main branch `main` in addition to `master`, indent output to improve grouping for a repository, improve handling of empty folders when gitignored. |
+
 ### `git-backup.sh` ###
 
 This script will clone all repositories specified by the `-l backupRepoListFile` option,
@@ -188,28 +194,28 @@ if they are not meeting needs, and manually copying allows testing the new copy.
 To implement using this approach:
 
 1. Determine the product's main repository.
-This is typically the repository for the source code of the main program.
-Other repositories in a product may include tests, other software components,
-development environment tools, documentation,
-libraries, etc.
+   This is typically the repository for the source code of the main program.
+   Other repositories in a product may include tests, other software components,
+   development environment tools, documentation,
+   libraries, etc.
 2. In the main repository working files,
-create a `build-util` folder, if not already created.
+   create a `build-util` folder, if not already created.
 3. Under `build-util`, create a `git-util` folder.
 4. Copy desired general Git utility scripts from the `build-util/git-util` folder of
-this repository to the folder created in step 3.
-Gain access to the scripts by individually downloading files from the repository or clone
-the `owf-util-git` repository to a local folder and then copy the scripts.
-These scripts should not need to be modified.
-If changes are needed, alert the development team via GitHub repository issues.
-A simple way to download scripts may be added in the future.
+   this repository to the folder created in step 3.
+   Gain access to the scripts by individually downloading files from the repository or clone
+   the `owf-util-git` repository to a local folder and then copy the scripts.
+   These scripts should not need to be modified.
+   If changes are needed, alert the development team via GitHub repository issues.
+   A simple way to download scripts may be added in the future.
 5. In the `build-util` folder created in step 2,
-create scripts that are specific to the product's main repository.
-These scripts will indicate folders to the general scripts.
-See examples in the `build-util` folder of this repository.
+   create scripts that are specific to the product's main repository.
+   These scripts will indicate folders to the general scripts.
+   See examples in the `build-util` folder of this repository.
 6. Also in the `build-util` folder, create a file `product-repo-list.txt`
-containing the list of repository names for the product.
-See the [example `product-repo-list.txt` file in this repository](build-util/product-repo-list.txt).
-This file will be used to perform operations on multiple repositories that comprise a product.
+   containing the list of repository names for the product.
+   See the [example `product-repo-list.txt` file in this repository](build-util/product-repo-list.txt).
+   This file will be used to perform operations on multiple repositories that comprise a product.
 
 The resulting folder structure will be similar that of this repository.
 
