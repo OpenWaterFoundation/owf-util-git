@@ -388,7 +388,7 @@ printVersion() {
 scriptFolder=$(cd $(dirname "$0") && pwd)
 scriptName=$(basename $0)
 
-version="1.9.2 2022-09-22"
+version="1.9.3 2022-09-23"
 
 # Set initial values.
 debug="false"
@@ -507,7 +507,7 @@ echo ""
 echo "${lineDoubleDash}"
 echo "Summary of all repositories - see above for details."
 echo "Run with -d to print additional debug information."
-echo "Sometimes modifications are indicated do to CRLF issues (cd to repo folder once may fix)."
+echo "Sometimes changes are indicated due to CRLF issues (cd to the repo folder once may fix)."
 # Print a message to encourage not using Cygwin to clone repositories.
 if [ "${operatingSystem}" != "linux" ]; then
   # On windows so make sure that Cygwin and Git Bash is not mixed
