@@ -4,7 +4,7 @@
 
 #-----------------------------------------------------------------NoticeStart-
 # Git Utilities
-# Copyright 2017-2022 Open Water Foundation.
+# Copyright 2017-2023 Open Water Foundation.
 #
 # License GPLv3+:  GNU GPL version 3 or later
 #
@@ -17,13 +17,12 @@
 # git-check.sh
 #
 # Check the status of multiple repositories for this project and indicate whether pull
-# or push or other action is needed.
+# or push or other action is needed:
 # - see the main entry point at the bottom of the script for script configuration
 # - currently must adhere to prescribed folder structure
 # - useful when multiple repositories form a product
 # - this script does not do anything to change repositories
 # - warn if any repositories use Cygwin because mixing with Git for Windows can cause confusion in tools
-#
 
 # List functions in alphabetical order.
 
@@ -111,7 +110,8 @@ checkWorkingFiles() {
   #   The file will have its original line endings in your working directory.
   #git diff-index --ignore-cr-at-eol --quiet HEAD
   #echo "exitCode=$exitCode"
-  if [ $gitDiffExitCode -eq 1 ]; then
+  if [ ${gitDiffExitCode} -eq 1 ]; then
+    # The following is checked below to indicate whether local files need to be committed.
     ${echo2} "  ${actionColor}Working files contain modified files that need to be committed, or staged files.${colorEnd}"
   fi
   # The above won't detect untracked files but the following will find those:
@@ -158,10 +158,10 @@ checkWorkingFiles() {
       if [ ${matchCount} -ge 1 ]; then
         # Empty folder found that is not git ignored.
         ${echo2} "  ${line2}" > ${emptyFoldersTmpFile}
+        # Track repositories with empty folders, often indicate an issue.
+        emptyFoldersRepoCount=$(expr ${emptyFoldersRepoCount} + 1)
       fi
-      done
-    # Track repositories with empty folders, often indicate an issue.
-    emptyFoldersRepoCount=$(expr ${emptyFoldersRepoCount} + 1)
+    done
     # If any empty untracked folders were detected, print the following.
     if [ -s "${emptyFoldersTmpFile}" ]; then
       matchCountTotal=$(cat ${emptyFoldersTmpFile} | wc -l)
@@ -174,7 +174,8 @@ checkWorkingFiles() {
     rm ${emptyFoldersTmpFile}
   fi
   # Global script data.
-  if [ $gitDiffExitCode -eq 1 -a $untrackedFilesCount -ne 0 ]; then
+  if [ ${gitDiffExitCode} -eq 1 -o ${untrackedFilesCount} -ne 0 ]; then
+    # The local repository has uncommitted working files.
     localChangesRepoCount=$(expr ${localChangesRepoCount} + 1)
   fi
 }
@@ -405,7 +406,7 @@ printVersion() {
 scriptFolder=$(cd $(dirname "$0") && pwd)
 scriptName=$(basename $0)
 
-version="1.9.0 2022-11-11"
+version="1.9.3 2023-03-26"
 
 # Set initial values.
 debug="false"
